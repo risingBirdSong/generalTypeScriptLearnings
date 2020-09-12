@@ -22,3 +22,5 @@ type ZZ = KeyOfDistributed<typeof RATIOS[keyof typeof RATIOS]>
 
 type KeyOfDistributedRemake<T> = T extends object ? keyof T : never;
 type innerKeys = KeyOfDistributedRemake<typeof RATIOS[keyof typeof RATIOS]>
+
+type XX = { [K in keyof typeof RATIOS]: keyof typeof RATIOS[K] }[keyof typeof RATIOS]

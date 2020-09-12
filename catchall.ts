@@ -24,3 +24,33 @@ type KeyOfDistributedRemake<T> = T extends object ? keyof T : never;
 type innerKeys = KeyOfDistributedRemake<typeof RATIOS[keyof typeof RATIOS]>
 
 type XX = { [K in keyof typeof RATIOS]: keyof typeof RATIOS[K] }[keyof typeof RATIOS]
+
+
+type A = {
+  first: string,
+}
+
+type B = {
+  first: string,
+  second: string,
+}
+
+const a: A = {
+  first: 'hello',
+}
+
+const b: B = {
+  first: 'world',
+  second: 'hello'
+}
+
+
+declare const foo: A | B;
+
+if (!("second" in foo)) {
+  foo
+}
+
+if ("second" in foo) {
+  foo
+}

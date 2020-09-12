@@ -9,7 +9,8 @@ let atesta: GetElementType<typeof options>
 
 //----------------------------------------------------------------------------
 
-const values = ['A', 'B', "c", "d"] as const;
+//notice that values is much more vague than before with "as const", it only infers values to be a string array.
+const values = ['A', 'B', "c", "d"];;
 type ElementType<T extends ReadonlyArray<unknown>> = T extends ReadonlyArray<
   infer ElementType
 >

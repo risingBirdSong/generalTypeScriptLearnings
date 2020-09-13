@@ -1,4 +1,3 @@
-import { number, string, boolean } from "yargs";
 
 type FlattenIfArray<T> = T extends (infer R)[] ? R : T
 
@@ -228,3 +227,20 @@ function testFuncB (a : number, b : string, c : boolean[]){
 
 // ah yes you constrain the input to be of a any function to dissalow inputs like this which would just result in type never 
 type gotParams = getParametersWithoutFirstExtends<"hello">
+
+type myGetClassParams <T extends new (...args : any[]) => any> = T extends new (...args : infer P) => any ? P : never;
+
+type classATest = myGetClassParams<ErrorConstructor>;
+// [(string | undefined)?]
+
+type classBTest = myGetClassParams<FunctionConstructor>;
+// string[]
+
+type classCTest = myGetClassParams<RegExpConstructor>;
+// [string, (string | undefined)?]
+
+type myInstanceInferer <T extends new (...args : any[]) => any> = T extends new (...args : any[]) => infer P ? P : never;
+
+type instanceA = myInstanceInferer<ErrorConstructor>;    // Error
+type instanceB = myInstanceInferer<FunctionConstructor>; // Function
+type instanceC = myInstanceInferer<RegExpConstructor>;   // RegExp

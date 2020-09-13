@@ -26,20 +26,20 @@ type innerKeys = KeyOfDistributedRemake<typeof RATIOS[keyof typeof RATIOS]>
 type XX = { [K in keyof typeof RATIOS]: keyof typeof RATIOS[K] }[keyof typeof RATIOS]
 
 
-type A = {
+type aaa = {
   first: string,
 }
 
-type B = {
+type bbb = {
   first: string,
   second: string,
 }
 
-const a: A = {
+const aaa: aaa = {
   first: 'hello',
 }
 
-const b: B = {
+const bbb: bbb = {
   first: 'world',
   second: 'hello'
 }

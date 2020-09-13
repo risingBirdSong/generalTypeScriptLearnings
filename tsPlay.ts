@@ -103,6 +103,10 @@ function unknownToObj(input: unknown) {
 // but rather than this tedious code he recommends libraries
 // runtypes, zod, or io-ts
 
+//https://github.com/pelotom/runtypes
+//https://github.com/vriad/zod
+//https://gcanti.github.io/io-ts/
+
 function hasKey<K extends string>(x: object, key: K): x is { [key in K]: unknown } {
   return key in x;
 }
@@ -172,3 +176,5 @@ interface basicPersonI {
 }
 
 type nullablePerson = { [key in keyof basicPersonI]: basicPersonI[key] | null }
+
+

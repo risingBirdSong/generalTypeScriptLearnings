@@ -81,21 +81,47 @@ interface simplePersonI {
   name: string;
 }
 // was wondering how to do this earlier, had wrongly tried -> T extends object;
-// function extendsObject<T extends Object>(input: T): simplePersonI {
-//   // how to allow this? SO we know T is an Object but we know nothing else about it? unkown perhaps?
-//   if (typeof input["name"] === "string") {
+function extendsObject<T extends Object>(input: T): simplePersonI {
+  // how to allow this? SO we know T is an Object but we know nothing else about it? unkown perhaps?
+  if (typeof input["name"] === "string") {
 
-//     return input;
-//   }
-// }
+    return input;
+  }
+}
 
-// function unknownToObj(input: unknown) {
-//   if (input instanceof Object) {
-//     if (typeof input["name"] === "string") {
+function unknownToObj(input: unknown) {
+  if (input instanceof Object) {
+    if (typeof input["name"] === "string") {
 
-//     }
-//   }
-// }
+    }
+  }
+}
+
+// Retsam with the knowledge!
+// said this process is tedious but can be done
+// And not to use type Object and probably not object either
+// but rather than this tedious code he recommends libraries
+// runtypes, zod, or io-ts
+
+function hasKey<K extends string>(x: object, key: K): x is { [key in K]: unknown } {
+  return key in x;
+}
+
+function assert(x: unknown, msg: string): asserts x {
+  if (!x) throw new Error(msg);
+}
+
+interface SimplePersonI {
+  name: string;
+}
+
+function validateObject(x: unknown): SimplePersonI {
+  assert(typeof x === "object" && x != null, "Expected an object")
+  assert(hasKey(x, "name"), "Expected to have a name property")
+  const name = x.name;
+  assert(typeof name === "string", "Expected x.name to be a string");
+  return { name };
+}
 
 class Collection<T extends { name: string }> {
   protected items: T[] = [];
@@ -139,3 +165,10 @@ let allRequired = {
 
 type makeOptional = myPartial<typeof allRequired>
 
+interface basicPersonI {
+  eyeColor: string;
+  height: number;
+  speed: number;
+}
+
+type nullablePerson = { [key in keyof basicPersonI]: basicPersonI[key] | null }

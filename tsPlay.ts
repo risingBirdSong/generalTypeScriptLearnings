@@ -38,3 +38,27 @@ const determiner = <T extends soldierI | villagerI>(input: T) => {
 }
 
 let specific = determiner(villager)
+
+function pluck<T extends object, K extends keyof T>(o: T, propertyNames: K[]): T[K][] {
+  return propertyNames.map((n) => o[n]);
+}
+
+interface Car {
+  manufacturer: string;
+  model: string;
+  year: number;
+}
+
+const taxi: Car = {
+  manufacturer: "Toyota",
+  model: "Camry",
+  year: 2014,
+} as const;
+
+// Manufacturer and model are both of type string,
+// so we can pluck them both into a typed string array
+let makeAndModel: string[] = pluck(taxi, ["manufacturer", "model"]);
+
+// If we try to pluck model and year, we get an
+// array of a union type: (string | number)[]
+let modelYear = pluck(taxi, ["model", "year"]);

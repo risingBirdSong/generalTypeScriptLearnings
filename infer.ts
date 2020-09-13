@@ -218,3 +218,13 @@ type myExcluder <T, U> = T extends U ? never : T;
 type excludedTest = myExcluder<string | number, string>;
 type excludedTestA = myExcluder<string[]| string, any[]>;
 type excludedTestB = myExcluder<any[]| string, string[]>;
+
+type getParameters <T extends (...args : any[]) => any> = T extends (...args : infer P) => any ? P : never;
+type getParametersWithoutFirstExtends <T> = T extends (...args : infer P) => any ? P : never;
+
+function testFuncB (a : number, b : string, c : boolean[]){
+  return "im just a test"
+}
+
+// ah yes you constrain the input to be of a any function to dissalow inputs like this which would just result in type never 
+type gotParams = getParametersWithoutFirstExtends<"hello">

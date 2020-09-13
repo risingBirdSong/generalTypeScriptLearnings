@@ -184,3 +184,18 @@ type delayedAddOrRemove = ReturnType<typeof addPersonAsync | typeof removePerson
   } 
 
   type pickedAgain = pickAgain<pickTestAnimal, "name" | "paws">
+
+  type First<T> =
+  T extends [infer U, ...unknown[]]
+    ? U
+    : never;
+
+type SomeTupleType = [string, number, boolean];
+type FirstElementType = First<SomeTupleType>; // string
+
+
+type redoFirst <T> = T extends [infer U , ...unknown[]] ? U : never;
+
+type redoFirstTest = redoFirst<[ ()=>number, boolean, string]>
+
+//neat :) 

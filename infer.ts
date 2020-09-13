@@ -1,3 +1,4 @@
+import { number, string, boolean } from "yargs";
 
 type FlattenIfArray<T> = T extends (infer R)[] ? R : T
 
@@ -117,3 +118,69 @@ type delayedAddOrRemove = ReturnType<typeof addPersonAsync | typeof removePerson
   type asyncTest = ReturnTypeAsyncOrSync<typeof addPersonAsync | typeof removePersonAsync>;
   type syncTest = ReturnTypeAsyncOrSync<typeof addPerson | typeof removePerson>;
   type bothTest = ReturnTypeAsyncOrSync<typeof addPersonAsync | typeof removePerson>
+
+
+ //  https://mariusschulz.com/articles/conditional-types-in-typescript
+  // great resource
+  type User = {
+    name: string;
+    email: string | null;
+    id : number;
+  };
+
+  type nonNullableProps <T> = {
+    [P in keyof T] : null extends T[P] ? never : T[P];
+  }[keyof T]
+
+  type test = nonNullableProps<User>
+
+
+  //Pick example
+  interface Todo {
+    title: string;
+    description: string;
+    completed: boolean;
+  }
+  
+  type TodoPreview = Pick<Todo, "title" | "completed">;
+  
+  const todo: TodoPreview = {
+    title: "Clean room",
+    completed: false,
+  };
+
+  // custom pick
+
+  interface pickTestAnimal {
+    paws : number,
+    name : string,
+    domesticated : boolean,
+  }
+
+
+    //attempts
+  type customPick_A<T, U extends keyof T> = {
+    [P in keyof T] : P extends U ? T[P] : never;
+  }
+  //notice the differences between running index acces with keyof T
+  type customPick_B<T, U extends keyof T> = {
+    [P in keyof T] : P extends U ? T[P] : never;
+  }[keyof T]
+
+  type pickFromAnimalA = customPick_A<pickTestAnimal, "domesticated">
+  type pickFromAnimalB = customPick_B<pickTestAnimal, "domesticated">
+
+    //proper implementation of pick
+  type properPick <T, U extends keyof T> = {
+    [P in U] : T[P]
+  }
+
+  type properlyPicked = properPick<pickTestAnimal, "domesticated" | "name">
+
+  // ah thats so cool 
+
+  type pickAgain <T, U extends keyof T> = {
+    [P in U] : T[P]
+  } 
+
+  type pickedAgain = pickAgain<pickTestAnimal, "name" | "paws">

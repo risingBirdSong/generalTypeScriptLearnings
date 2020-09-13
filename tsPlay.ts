@@ -177,4 +177,3 @@ interface basicPersonI {
 
 type nullablePerson = { [key in keyof basicPersonI]: basicPersonI[key] | null }
 
-

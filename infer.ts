@@ -39,3 +39,81 @@ type inferEitherOfTArr = GetReturnType<typeof eitherTorTArr>
 //ReturnType<Type>
 type T2 = ReturnType<<T>() => T>;
 //    ^ = type T2 = unknown
+
+function addPerson(personName: string) {
+  return {
+    type: "AddPerson",
+    payload: personName,
+  } as const;
+}
+
+function removePerson(id: number) {
+  return {
+    type: "RemovePerson",
+    payload: id,
+  } as const;
+}
+
+type addOrRemove = ReturnType<typeof addPerson | typeof removePerson>
+
+//oh that is cool;
+
+
+function wait (time : number){
+  setTimeout(() => {
+    return;
+  }, time);
+}
+
+async function addPersonAsync(
+  personName: string
+) {
+  await wait(200);
+  return {
+    type: "AddPerson",
+    payload: personName,
+  } as const;
+}
+
+async function removePersonAsync(id: number) {
+  await wait(200);
+  return {
+    type: "RemovePerson",
+    payload: id,
+  } as const;
+}
+
+type delayedAddOrRemove = ReturnType<typeof addPersonAsync | typeof removePersonAsync>
+
+
+ //but to get the returned values fromt he wrapped promise?
+
+ type customReturnType<
+  T extends (...args: any) => any
+> = T extends (...args: any) => infer R
+  ? R
+  : any;
+
+  type ReturnTypeJustAsync<
+  T extends (...args: any) => any
+> = T extends (...args: any) => Promise<infer R>
+  ? R
+  : any;
+
+  type valuesFromPromise = ReturnTypeJustAsync<typeof addPersonAsync | typeof removePersonAsync>
+
+  //oh that is so cool
+
+  // ahh neat this is exactly what I wanted to do next!
+
+  type ReturnTypeAsyncOrSync<
+  T extends (...args: any) => any
+> = T extends (...args: any) => Promise<infer R>
+  ? R
+  : T extends (...args: any) => infer R
+  ? R
+  : any;
+
+  type asyncTest = ReturnTypeAsyncOrSync<typeof addPersonAsync | typeof removePersonAsync>;
+  type syncTest = ReturnTypeAsyncOrSync<typeof addPerson | typeof removePerson>;
+  type bothTest = ReturnTypeAsyncOrSync<typeof addPersonAsync | typeof removePerson>

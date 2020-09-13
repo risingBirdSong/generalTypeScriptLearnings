@@ -123,3 +123,19 @@ class SearchableCollection<T extends { name: string }> extends Collection<T> {
 
 let mySearchableCollection = new SearchableCollection([{ name: "frederick", age: 34 }, { name: "claris", age: 87 }])
 console.log(mySearchableCollection.find("frederick"))
+
+type myPartial<T> = {
+  [P in keyof T]?: T[P];
+};
+
+type makeReadOnly<T> = {
+  readonly [k in keyof T]: T[k];
+}
+
+let allRequired = {
+  hammer: "on",
+  fretBoard: "standard"
+}
+
+type makeOptional = myPartial<typeof allRequired>
+

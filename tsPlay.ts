@@ -76,7 +76,50 @@ const remakeGetProperty = <T, K extends keyof T>(o: T, prop: K) => {
 }
 let getAgeAgain = remakeGetProperty(villager, "age");
 
-// was wondering how to do this earlier, had wrongly tried -> T extends object;
-function extendsObject<T extends Object>(o: T) {
 
+interface simplePersonI {
+  name: string;
 }
+// was wondering how to do this earlier, had wrongly tried -> T extends object;
+// function extendsObject<T extends Object>(input: T): simplePersonI {
+//   // how to allow this? SO we know T is an Object but we know nothing else about it? unkown perhaps?
+//   if (typeof input["name"] === "string") {
+
+//     return input;
+//   }
+// }
+
+// function unknownToObj(input: unknown) {
+//   if (input instanceof Object) {
+//     if (typeof input["name"] === "string") {
+
+//     }
+//   }
+// }
+
+class Collection<T extends { name: string }> {
+  protected items: T[] = [];
+  constructor(items: T[]) {
+    this.items.push(...items);
+  }
+  add(items: T) {
+    this.items.push(items);
+  }
+  remove(index: number) {
+    this.items.splice(index, 1);
+  }
+  getItem(index: number): T {
+    return this.items[index];
+  }
+}
+
+let myCollection = new Collection([{ name: "a", extra: "allowed" }])
+
+class SearchableCollection<T extends { name: string }> extends Collection<T> {
+  find(name: string): T | undefined {
+    return this.items.find(item => item.name === name);
+  }
+}
+
+let mySearchableCollection = new SearchableCollection([{ name: "frederick", age: 34 }, { name: "claris", age: 87 }])
+console.log(mySearchableCollection.find("frederick"))

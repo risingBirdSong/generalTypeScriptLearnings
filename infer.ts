@@ -199,3 +199,22 @@ type redoFirst <T> = T extends [infer U , ...unknown[]] ? U : never;
 type redoFirstTest = redoFirst<[ ()=>number, boolean, string]>
 
 //neat :) 
+
+type myExtracter <T, U> = T extends U ? T : never;
+type Extracted = myExtracter<number | boolean, string | number | boolean>;
+
+type A = Extract<string | string[], any[]>;      // string[]
+type B = Extract<(() => void) | null, Function>; // () => void
+type C = Extract<200 | 400, 200 | 201>;          // 200
+type D = Extract<number, boolean>;   
+
+type myA = myExtracter<string | string[], any[]>;      // string[]
+type myB = myExtracter<(() => void) | null, Function>; // () => void
+type myC = myExtracter<200 | 400, 200 | 201>;          // 200
+type myD = myExtracter<number, boolean>;   
+
+type myExcluder <T, U> = T extends U ? never : T;
+
+type excludedTest = myExcluder<string | number, string>;
+type excludedTestA = myExcluder<string[]| string, any[]>;
+type excludedTestB = myExcluder<any[]| string, string[]>;

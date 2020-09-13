@@ -62,3 +62,21 @@ let makeAndModel: string[] = pluck(taxi, ["manufacturer", "model"]);
 // If we try to pluck model and year, we get an
 // array of a union type: (string | number)[]
 let modelYear = pluck(taxi, ["model", "year"]);
+
+function getProperty<T, K extends keyof T>(o: T, propertyName: K): T[K] {
+  return o[propertyName]; // o[propertyName] is of type T[K]
+}
+
+let gotAge = getProperty(villager, "age");
+let gotName = getProperty(villager, "name");
+let gotCivilianStatus = getProperty(villager, "civilian");
+
+const remakeGetProperty = <T, K extends keyof T>(o: T, prop: K) => {
+  return o[prop];
+}
+let getAgeAgain = remakeGetProperty(villager, "age");
+
+// was wondering how to do this earlier, had wrongly tried -> T extends object;
+function extendsObject<T extends Object>(o: T) {
+
+}

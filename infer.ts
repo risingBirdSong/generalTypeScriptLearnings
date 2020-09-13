@@ -244,3 +244,22 @@ type myInstanceInferer <T extends new (...args : any[]) => any> = T extends new 
 type instanceA = myInstanceInferer<ErrorConstructor>;    // Error
 type instanceB = myInstanceInferer<FunctionConstructor>; // Function
 type instanceC = myInstanceInferer<RegExpConstructor>;   // RegExp
+
+// unpacking type example from ahejlsberg PR
+
+type Unpacked<T> =
+    T extends (infer U)[] ? U :
+    T extends (...args: any[]) => infer U ? U :
+    T extends Promise<infer U> ? U :
+    T;
+
+type T0 = Unpacked<string>;  // string
+type T1 = Unpacked<string[]>;  // string
+type Tt2 = Unpacked<() => string>;  // string
+type T3 = Unpacked<Promise<string>>;  // string
+type T4 = Unpacked<Promise<string>[]>;  // Promise<string>
+type T5 = Unpacked<Unpacked<Promise<string>[]>>;  // string
+
+type FooType<T> = T extends { a: infer U, b: infer U } ? U : never;
+type T10 = FooType<{ a: string, b: string }>;  // string
+type T11 = FooType<{ a: string, b: number }>;  // string | number

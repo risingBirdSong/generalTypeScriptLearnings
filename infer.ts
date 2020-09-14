@@ -313,3 +313,31 @@ type ReadonlyPartial<T> = { +readonly [P in keyof T]+?: T[P] }; // Add readonly 
 
 type convertA = MutableRequired<readonlyOptional>;
 type convertB = ReadonlyPartial<mutableRequired>;
+
+type abc = { a: string };
+type bcd = { b: number };
+
+type T1a = keyof (abc & bcd); // "a" | "b"
+
+const T1aTest : T1a = "a";
+
+type mergeA = {a : string} & {b : number} & {c : boolean};
+
+
+let mergaAtest : mergeA = {
+  a : "aaa",
+  b : 21,
+  c : true
+}
+
+type pickTwo = Pick<mergeA, "a" | "c">
+
+let pickTwoObj : pickTwo = {
+  a : "aaa",
+  c : false
+}
+
+type T2a<T> = keyof T; // keyof T | "b"
+type mergeB = {d : string} & {e : number};
+type keysOf = T2a<mergeA & mergeB>
+

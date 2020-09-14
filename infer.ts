@@ -263,3 +263,15 @@ type T5 = Unpacked<Unpacked<Promise<string>[]>>;  // string
 type FooType<T> = T extends { a: infer U, b: infer U } ? U : never;
 type T10 = FooType<{ a: string, b: string }>;  // string
 type T11 = FooType<{ a: string, b: number }>;  // string | number
+
+
+type remakeUnpacked<T> = T extends (infer U) [] ? U : 
+  T extends (...args : any[]) => infer U ? U :
+  T extends Promise<infer U> ? U :
+  T;
+type myT0 = remakeUnpacked<number>;
+type myT1 = remakeUnpacked<number[]>;
+type myT2 = remakeUnpacked<() => {tada : string}>;
+type myT3 = remakeUnpacked<Promise<string>>;
+type myT4 = remakeUnpacked<Promise<string[]>>;
+type myT5 =remakeUnpacked<remakeUnpacked<remakeUnpacked<string>>>;

@@ -341,3 +341,39 @@ type T2a<T> = keyof T; // keyof T | "b"
 type mergeB = {d : string} & {e : number};
 type keysOf = T2a<mergeA & mergeB>
 
+
+const c = "c";
+const d = 10;
+const e = Symbol();
+
+const enum E1 {
+  A,
+  B,
+  C,
+}
+const enum E2 {
+  A = "A",
+  B = "B",
+  C = "C",
+}
+
+type Foo2 = {
+  a: string; // String-like name
+  5: string; // Number-like name
+  c: string; // String-like name
+  [d]: string; // Number-like name
+  [e]: string; // Symbol-like name
+  [E1.A]: string; // Number-like name
+  [E2.A]: string; // String-like name
+};
+
+type Arrayish<T> = {
+  length: number;
+  [x: number]: T;
+};
+
+ let map: Arrayish<string> = [];
+ map.length = 10;
+  // map[4] = 4; Type '4' is not assignable to type 'string'.ts(2322)
+  map[5] = "no errors"
+  
